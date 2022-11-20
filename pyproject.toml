@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "Amp factor dashboard"
+version = "0.1.0"
+description = ""
+authors = ["Pedro Yves"]
+
+[tool.poetry.dependencies]
+python = "~3.8"
+pandas = "^1.5.1"
+numpy = "^1.23.5"
+plotly = "^5.11.0"
+streamlit = "1.13.0"
+gql = "2.0.0"
+web3 = "5.23.0"
+eth-abi = "2.1.1"
+
+[tool.poetry.dev-dependencies]
+jupyter = "^1.0.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
