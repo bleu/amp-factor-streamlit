@@ -43,7 +43,7 @@ if typeTokenSell:
         'label': ['Before the trade', 'After the trade']
       })
 
-      fig.add_scatter(x=transaction['transactionSell'],y=transaction['transactionBuy'], text=transaction['label'],name="Transaction variation",        hovertemplate='<br>'.join([
+      fig.add_scatter(mode="markers",x=transaction['transactionSell'],y=transaction['transactionBuy'], text=transaction['label'],name="Transaction variation",        hovertemplate='<br>'.join([
               '%{text}',
               'X: %{x}',
               'Y: %{y}',
@@ -74,7 +74,7 @@ if typeTokenSell:
         'label': ['Before the trade', 'After the trade']
       })
 
-      fig.add_scatter(x=transaction['transactionBuy'],y=transaction['transactionSell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
+      fig.add_scatter(mode="markers",x=transaction['transactionBuy'],y=transaction['transactionSell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
               '%{text}',
               'X: %{x}',
               'Y: %{y}',
