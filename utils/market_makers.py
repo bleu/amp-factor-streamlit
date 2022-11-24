@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod, abstractproperty
 
-
 class MarketMaker(ABC):
   def __init__(self, **kwargs):
     self.constant = self.get_constant(**kwargs)
@@ -13,6 +12,13 @@ class MarketMaker(ABC):
   def calculate_y(self):
     pass
 
+  @abstractmethod
+  def define_sell_buy(self):
+    pass
+
+  @abstractmethod
+  def calculate_trade(self):
+    pass
 
 class LinearInvariant(MarketMaker):
   def get_constant(self, x, y):
@@ -20,6 +26,39 @@ class LinearInvariant(MarketMaker):
   
   def calculate_y(self, x):
     return self.constant - x
+
+  def define_sell_buy(self,typeTokenSell,balanceX,balanceY):
+    if typeTokenSell == 'X':
+      tokensData = {
+        'typeTokenBuy': 'Y',
+        'initialAmountSell': balanceX,
+        'initialAmountBuy': balanceY,
+      }
+      return tokensData
+    if typeTokenSell == 'Y': 
+      tokensData = {
+        'typeTokenBuy': 'X',
+        'initialAmountSell': balanceY,
+        'initialAmountBuy': balanceX,
+      }
+      return tokensData
+
+  def calculate_trade(self, initialAmountSell, initialAmountBuy, amountTokenSell):
+    k =  initialAmountSell + initialAmountBuy
+    amountTokenBuy = initialAmountSell + initialAmountBuy + amountTokenSell - k
+    price = amountTokenBuy/amountTokenSell
+    finalAmountSell = initialAmountSell+amountTokenSell
+    finalAmountBuy = initialAmountBuy-amountTokenBuy
+
+    transaction = {
+      'amountTokenBuy': amountTokenBuy,
+      'price': price,
+      'transactionSell': [initialAmountSell,finalAmountSell],
+      'transactionBuy': [initialAmountBuy,finalAmountBuy],
+      'label': ['Before the trade', 'After the trade']
+    }
+
+    return transaction
 
 
 class Uniswap(MarketMaker):
