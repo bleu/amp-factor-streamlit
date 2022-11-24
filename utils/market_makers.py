@@ -48,12 +48,12 @@ class StableSwapBinary(MarketMaker):
       a = 1/4
       b = amp
       c = -1 * ((amp * (x+y)) + (x*y))
-      delta = ((b**2) - (4*a*c))**(1/2) 
+      delta = ((b**2) - (4*a*c))**(1/2)
       return (-b + delta)/(2*a)
 
   def calculate_y(self, x):
-    first_part = self.amp * self.constant + ((self.constant**2)/4) - self.amp*x
-    second_part = (self.amp+x)**(-1)
+    first_part = self.amp * self.constant + ((self.constant/2)**2) - self.amp*x
+    second_part = 1/(self.amp+x)
     return first_part * second_part
 
   def calculate_spot_price(self, x):
