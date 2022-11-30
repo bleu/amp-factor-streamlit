@@ -11,7 +11,7 @@ balance_y = st.number_input('Insert the initial amount of token Y', value=2, ste
 
 linear_invariant = LinearInvariant(x=balance_x, y=balance_y)
 
-st.write('linear_invariant.constant is equal to ', linear_invariant.constant)
+st.write('K is equal to ', linear_invariant.constant)
 
 type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
 

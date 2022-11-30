@@ -11,7 +11,7 @@ balance_y = st.number_input('Insert the initial amount of token Y', value=10, st
 
 uniswap = Uniswap(x=balance_x, y=balance_y)
 
-st.write('uniswap.constant is equal to ', uniswap.constant)
+st.write('K is equal to ', uniswap.constant)
 
 type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
 
