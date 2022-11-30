@@ -11,23 +11,21 @@ balance_y = st.number_input('Insert the initial amount of token Y', value=10, st
 
 uniswap = Uniswap(x=balance_x, y=balance_y)
 
-k = uniswap.get_constant(balance_x,balance_y)
-
-st.write('K is equal to ', k)
+st.write('uniswap.constant is equal to ', uniswap.constant)
 
 type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
 
-x = np.linspace(0, k,num=k)
-y = np.linspace(0, k,num=k)
+x = np.linspace(0, uniswap.constant,num=uniswap.constant)
+y = np.linspace(0, uniswap.constant,num=uniswap.constant)
 
-fig = px.line(x=x, y=(k/x), title='Constant product formula Pool Chart')
+fig = px.line(x=x, y=(uniswap.constant/x), title='Constant product formula Pool Chart')
 
 if type_token_sell:
   tokens_data = uniswap.define_sell_buy(type_token_sell,balance_x,balance_y)
   type_token_buy = tokens_data['type_token_buy']
   initial_amount_sell = tokens_data['initial_amount_sell']
   initial_amount_buy = tokens_data['initial_amount_buy']
-  amount_token_sell = st.number_input(label='How much of token {} you want to sell?'.format(type_token_sell),value=2.0, step=0.1,max_value=float(k), min_value=0.1)
+  amount_token_sell = st.number_input(label='How much of token {} you want to sell?'.format(type_token_sell),value=2.0, step=0.1,max_value=float(uniswap.constant), min_value=0.1)
 
   transaction = uniswap.calculate_trade(initial_amount_sell, initial_amount_buy, amount_token_sell)
   amount_token_buy = transaction['amount_token_buy']

@@ -11,16 +11,14 @@ balance_y = st.number_input('Insert the initial amount of token Y', value=2, ste
 
 linear_invariant = LinearInvariant(x=balance_x, y=balance_y)
 
-k = linear_invariant.get_constant(balance_x,balance_y)
-
-st.write('K is equal to ', k)
+st.write('linear_invariant.constant is equal to ', linear_invariant.constant)
 
 type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
 
-x = np.linspace(0, k)
-y = np.linspace(0, k)
+x = np.linspace(0, linear_invariant.constant)
+y = np.linspace(0, linear_invariant.constant)
 
-fig = px.line(x=x, y= k-x, title='Line Invariant Pool Chart')
+fig = px.line(x=x, y= linear_invariant.constant-x, title='Line Invariant Pool Chart')
 
 if type_token_sell:
   tokens_data = linear_invariant.define_sell_buy(type_token_sell,balance_x,balance_y)

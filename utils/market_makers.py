@@ -51,8 +51,7 @@ class LinearInvariant(MarketMaker):
       return tokensData
 
   def calculate_trade(self, initial_amount_sell, initial_amount_buy, amount_token_sell):
-    k =  initial_amount_sell + initial_amount_buy
-    amount_token_buy = initial_amount_sell + initial_amount_buy + amount_token_sell - k
+    amount_token_buy = initial_amount_sell + initial_amount_buy + amount_token_sell - self.constant
     price = amount_token_buy/amount_token_sell
     final_amount_sell = initial_amount_sell+amount_token_sell
     final_amount_buy = initial_amount_buy-amount_token_buy
