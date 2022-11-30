@@ -40,7 +40,7 @@ if type_token_sell:
       'X: %{x}',
       'Y: %{y}',
     ]))
-  if type_token_sell == "Y":
+  else:
     st.write('You paid 1 X for', price, 'Y')
 
     fig.add_scatter(mode="markers",x=transaction['transaction_buy'],y=transaction['transaction_sell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([

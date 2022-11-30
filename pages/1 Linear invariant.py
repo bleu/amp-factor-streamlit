@@ -42,7 +42,7 @@ if type_token_sell:
                 'Y: %{y}',
             ]),
         )
-    if type_token_sell == 'Y':
+    else:
         fig.add_scatter(mode="markers",x=transaction['transaction_buy'],y=transaction['transaction_sell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
             '%{text}',
             'X: %{x}',
