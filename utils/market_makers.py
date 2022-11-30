@@ -11,6 +11,10 @@ class MarketMaker(ABC):
   @abstractmethod
   def calculate_y(self):
     pass
+  
+  @abstractmethod
+  def calculate_spot_price(self):
+    pass
 
   @abstractmethod
   def define_sell_buy(self):
@@ -20,12 +24,15 @@ class MarketMaker(ABC):
   def calculate_trade(self):
     pass
 
-class LinearInvariantBinary(MarketMaker):
+class LinearInvariant(MarketMaker):
   def get_constant(self, x, y):
     return x+y
   
   def calculate_y(self, x):
     return self.constant - x
+  
+  def calculate_spot_price(self):
+    return 1
 
   def define_sell_buy(self,typeTokenSell,balanceX,balanceY):
     if typeTokenSell == 'X':
@@ -67,7 +74,10 @@ class Uniswap(MarketMaker):
   
   def calculate_y(self, x):
     return self.constant / x
-
+  
+  def calculate_spot_price(self, x):
+    return self.constant / (x**2)
+  
   def define_sell_buy(self,typeTokenSell,balanceX,balanceY):
     if typeTokenSell == 'X':
       tokensData = {
@@ -100,20 +110,31 @@ class Uniswap(MarketMaker):
 
     return transaction
 
-class StableSwap(MarketMaker):
+class StableSwapBinary(MarketMaker):
+  def __init__(self, **kwargs):
+    self.amp = kwargs["amp"]
+    super().__init__(**kwargs)
+
   def get_constant(self, x, y, amp):
       a = 1/4
       b = amp
       c = -1 * ((amp * (x+y)) + (x*y))
-      delta = ((b**2) - (4*a*c))**(1/2) 
+      delta = ((b**2) - (4*a*c))**(1/2)
       return (-b + delta)/(2*a)
 
-  def calculate_y(self, x, amp):
-    first_part = amp * self.constant + ((self.constant**2)/4) - amp*x
-    second_part = (amp+x)**(-1)
+  def calculate_y(self, x):
+    first_part = self.amp * self.constant + ((self.constant/2)**2) - self.amp*x
+    second_part = 1/(self.amp+x)
     return first_part * second_part
 
-  def calculate_trade():
+  def calculate_spot_price(self, x):
+    part1 = 1/(self.amp+x)
+    part21 = self.amp
+    part221 = (self.amp*self.constant)+((self.constant**2)*0.25)-(self.amp*x)
+    part222 = 1/(self.amp+x)
+    return part1*(part21+(part221*part222))
+
+  def calculate_trade(): 
     pass
   
   def define_sell_buy():
