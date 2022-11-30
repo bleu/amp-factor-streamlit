@@ -6,46 +6,46 @@ from utils.market_makers import Uniswap
 
 st.title('Constant product formula')
 
-balanceX = st.number_input('Insert the initial amount of token X', value=10, step=1)
-balanceY = st.number_input('Insert the initial amount of token Y', value=10, step=1)
+balance_x = st.number_input('Insert the initial amount of token X', value=10, step=1)
+balance_y = st.number_input('Insert the initial amount of token Y', value=10, step=1)
 
-uniswap = Uniswap(x=balanceX, y=balanceY)
+uniswap = Uniswap(x=balance_x, y=balance_y)
 
-k = uniswap.get_constant(balanceX,balanceY)
+k = uniswap.get_constant(balance_x,balance_y)
 
 st.write('K is equal to ', k)
 
-typeTokenSell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
+type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
 
 x = np.linspace(0, k,num=k)
 y = np.linspace(0, k,num=k)
 
 fig = px.line(x=x, y=(k/x), title='Constant product formula Pool Chart')
 
-if typeTokenSell:
-  tokensData = uniswap.define_sell_buy(typeTokenSell,balanceX,balanceY)
-  typeTokenBuy = tokensData['typeTokenBuy']
-  initialAmountSell = tokensData['initialAmountSell']
-  initialAmountBuy = tokensData['initialAmountBuy']
-  amountTokenSell = st.number_input(label='How much of token {} you want to sell?'.format(typeTokenSell),value=2.0, step=0.1,max_value=float(k), min_value=0.1)
+if type_token_sell:
+  tokens_data = uniswap.define_sell_buy(type_token_sell,balance_x,balance_y)
+  type_token_buy = tokens_data['type_token_buy']
+  initial_amount_sell = tokens_data['initial_amount_sell']
+  initial_amount_buy = tokens_data['initial_amount_buy']
+  amount_token_sell = st.number_input(label='How much of token {} you want to sell?'.format(type_token_sell),value=2.0, step=0.1,max_value=float(k), min_value=0.1)
 
-  transaction = uniswap.calculate_trade(initialAmountSell, initialAmountBuy, amountTokenSell)
-  amountTokenBuy = transaction['amountTokenBuy']
-  st.write('You will receive', amountTokenBuy, 'of token', typeTokenBuy)
+  transaction = uniswap.calculate_trade(initial_amount_sell, initial_amount_buy, amount_token_sell)
+  amount_token_buy = transaction['amount_token_buy']
+  st.write('You will receive', amount_token_buy, 'of token', type_token_buy)
 
   price = transaction['price']
 
-  if typeTokenSell == "X":
+  if type_token_sell == "X":
     st.write('You paid 1 Y for', price, 'X')
-    fig.add_scatter(mode="markers",x=transaction['transactionSell'],y=transaction['transactionBuy'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
+    fig.add_scatter(mode="markers",x=transaction['transaction_sell'],y=transaction['transaction_buy'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
       '%{text}',
       'X: %{x}',
       'Y: %{y}',
     ]))
-  if typeTokenSell == "Y":
+  if type_token_sell == "Y":
     st.write('You paid 1 X for', price, 'Y')
 
-    fig.add_scatter(mode="markers",x=transaction['transactionBuy'],y=transaction['transactionSell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
+    fig.add_scatter(mode="markers",x=transaction['transaction_buy'],y=transaction['transaction_sell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
         '%{text}',
         'X: %{x}',
         'Y: %{y}',

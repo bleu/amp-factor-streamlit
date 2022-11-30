@@ -34,34 +34,34 @@ class LinearInvariant(MarketMaker):
   def calculate_spot_price(self):
     return 1
 
-  def define_sell_buy(self,typeTokenSell,balanceX,balanceY):
-    if typeTokenSell == 'X':
+  def define_sell_buy(self, type_token_sell, balance_x, balance_y):
+    if type_token_sell == 'X':
       tokensData = {
-        'typeTokenBuy': 'Y',
-        'initialAmountSell': balanceX,
-        'initialAmountBuy': balanceY,
+        'type_token_buy': 'Y',
+        'initial_amount_sell': balance_x,
+        'initial_amount_buy': balance_y,
       }
       return tokensData
-    if typeTokenSell == 'Y': 
+    else:
       tokensData = {
-        'typeTokenBuy': 'X',
-        'initialAmountSell': balanceY,
-        'initialAmountBuy': balanceX,
+        'type_token_buy': 'X',
+        'initial_amount_sell': balance_y,
+        'initial_amount_buy': balance_x,
       }
       return tokensData
 
-  def calculate_trade(self, initialAmountSell, initialAmountBuy, amountTokenSell):
-    k =  initialAmountSell + initialAmountBuy
-    amountTokenBuy = initialAmountSell + initialAmountBuy + amountTokenSell - k
-    price = amountTokenBuy/amountTokenSell
-    finalAmountSell = initialAmountSell+amountTokenSell
-    finalAmountBuy = initialAmountBuy-amountTokenBuy
+  def calculate_trade(self, initial_amount_sell, initial_amount_buy, amount_token_sell):
+    k =  initial_amount_sell + initial_amount_buy
+    amount_token_buy = initial_amount_sell + initial_amount_buy + amount_token_sell - k
+    price = amount_token_buy/amount_token_sell
+    final_amount_sell = initial_amount_sell+amount_token_sell
+    final_amount_buy = initial_amount_buy-amount_token_buy
 
     transaction = {
-      'amountTokenBuy': amountTokenBuy,
+      'amount_token_buy': amount_token_buy,
       'price': price,
-      'transactionSell': [initialAmountSell,finalAmountSell],
-      'transactionBuy': [initialAmountBuy,finalAmountBuy],
+      'transaction_sell': [initial_amount_sell,final_amount_sell],
+      'transaction_buy': [initial_amount_buy,final_amount_buy],
       'label': ['Before the trade', 'After the trade']
     }
 
@@ -77,34 +77,34 @@ class Uniswap(MarketMaker):
   
   def calculate_spot_price(self, x):
     return self.constant / (x**2)
-  
-  def define_sell_buy(self,typeTokenSell,balanceX,balanceY):
-    if typeTokenSell == 'X':
+
+  def define_sell_buy(self, type_token_sell, balance_x, balance_y):
+    if type_token_sell == 'X':
       tokensData = {
-        'typeTokenBuy': 'Y',
-        'initialAmountSell': balanceX,
-        'initialAmountBuy': balanceY,
+        'type_token_buy': 'Y',
+        'initial_amount_sell': balance_x,
+        'initial_amount_buy': balance_y,
       }
       return tokensData
-    if typeTokenSell == 'Y': 
+    else:
       tokensData = {
-        'typeTokenBuy': 'X',
-        'initialAmountSell': balanceY,
-        'initialAmountBuy': balanceX,
+        'type_token_buy': 'X',
+        'initial_amount_sell': balance_y,
+        'initial_amount_buy': balance_x,
       }
       return tokensData
-  
-  def calculate_trade(self, initialAmountSell, initialAmountBuy, amountTokenSell):
-    amountTokenBuy = (initialAmountBuy * amountTokenSell) / (initialAmountSell+amountTokenSell)
-    price = amountTokenBuy/amountTokenSell
-    finalAmountSell = initialAmountSell+amountTokenSell
-    finalAmountBuy = initialAmountBuy-amountTokenBuy
+
+  def calculate_trade(self, initial_amount_sell, initial_amount_buy, amount_token_sell):
+    amount_token_buy = (initial_amount_buy * amount_token_sell) / (initial_amount_sell+amount_token_sell)
+    price = amount_token_buy/amount_token_sell
+    final_amount_sell = initial_amount_sell+amount_token_sell
+    final_amount_buy = initial_amount_buy-amount_token_buy
 
     transaction = {
-      'amountTokenBuy': amountTokenBuy,
+      'amount_token_buy': amount_token_buy,
       'price': price,
-      'transactionSell': [initialAmountSell,finalAmountSell],
-      'transactionBuy': [initialAmountBuy,finalAmountBuy],
+      'transaction_sell': [initial_amount_sell,final_amount_sell],
+      'transaction_buy': [initial_amount_buy,final_amount_buy],
       'label': ['Before the trade', 'After the trade']
     }
 
