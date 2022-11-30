@@ -15,8 +15,8 @@ st.write('uniswap.constant is equal to ', uniswap.constant)
 
 type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
 
-x = np.linspace(0, uniswap.constant,num=uniswap.constant)
-y = np.linspace(0, uniswap.constant,num=uniswap.constant)
+x = np.linspace(1, uniswap.constant,num=uniswap.constant)
+y = np.linspace(1, uniswap.constant,num=uniswap.constant)
 
 fig = px.line(x=x, y=(uniswap.constant/x), title='Constant product formula Pool Chart')
 
