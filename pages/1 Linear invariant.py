@@ -2,14 +2,14 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import numpy as np
-from utils.market_makers import LinearInvariant
+from utils.market_makers import LinearInvariantBinary
 
 st.title('Linear Invariant')
 
 balanceX = st.number_input('Insert the initial amount of token X', value=2, step=1)
 balanceY = st.number_input('Insert the initial amount of token Y', value=2, step=1)
 
-linear_invariant = LinearInvariant(x=balanceX, y=balanceY)
+linear_invariant = LinearInvariantBinary(x=balanceX, y=balanceY)
 
 k = linear_invariant.get_constant(balanceX,balanceY)
 

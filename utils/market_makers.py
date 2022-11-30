@@ -20,7 +20,7 @@ class MarketMaker(ABC):
   def calculate_trade(self):
     pass
 
-class LinearInvariant(MarketMaker):
+class LinearInvariantBinary(MarketMaker):
   def get_constant(self, x, y):
     return x+y
   
@@ -63,10 +63,42 @@ class LinearInvariant(MarketMaker):
 
 class Uniswap(MarketMaker):
   def get_constant(self, x, y):
-    return x+y
+    return x*y
   
   def calculate_y(self, x):
     return self.constant / x
+
+  def define_sell_buy(self,typeTokenSell,balanceX,balanceY):
+    if typeTokenSell == 'X':
+      tokensData = {
+        'typeTokenBuy': 'Y',
+        'initialAmountSell': balanceX,
+        'initialAmountBuy': balanceY,
+      }
+      return tokensData
+    if typeTokenSell == 'Y': 
+      tokensData = {
+        'typeTokenBuy': 'X',
+        'initialAmountSell': balanceY,
+        'initialAmountBuy': balanceX,
+      }
+      return tokensData
+  
+  def calculate_trade(self, initialAmountSell, initialAmountBuy, amountTokenSell):
+    amountTokenBuy = (initialAmountBuy * amountTokenSell) / (initialAmountSell+amountTokenSell)
+    price = amountTokenBuy/amountTokenSell
+    finalAmountSell = initialAmountSell+amountTokenSell
+    finalAmountBuy = initialAmountBuy-amountTokenBuy
+
+    transaction = {
+      'amountTokenBuy': amountTokenBuy,
+      'price': price,
+      'transactionSell': [initialAmountSell,finalAmountSell],
+      'transactionBuy': [initialAmountBuy,finalAmountBuy],
+      'label': ['Before the trade', 'After the trade']
+    }
+
+    return transaction
 
 class StableSwap(MarketMaker):
   def get_constant(self, x, y, amp):
@@ -80,3 +112,9 @@ class StableSwap(MarketMaker):
     first_part = amp * self.constant + ((self.constant**2)/4) - amp*x
     second_part = (amp+x)**(-1)
     return first_part * second_part
+
+  def calculate_trade():
+    pass
+  
+  def define_sell_buy():
+    pass

@@ -3,7 +3,7 @@ import plotly.express as px
 import pandas as pd
 import numpy as np
 from utils.queries import query_pool_data
-from utils.market_makers import LinearInvariant, Uniswap, StableSwap
+from utils.market_makers import LinearInvariantBinary, Uniswap, StableSwap
 
 st.title('Stable curve simulation')
 pool_id = st.text_input('Pool id', value='0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d')
@@ -24,7 +24,7 @@ base_amp = float(x_data["balance"])
 amountAmp = st.slider('Amp factor', min_value=base_amp/100, max_value=base_amp*2, value=base_amp, step=base_amp/100)
 
 stable_swape = StableSwap(x=base_x, y=base_y, amp=base_amp)
-linear_invariant = LinearInvariant(x=base_x, y=base_y)
+linear_invariant = LinearInvariantBinary(x=base_x, y=base_y)
 uniswap = Uniswap(x=base_x, y=base_y)
 
 st.write('Constant value of the pool is equal to ', stable_swape.constant)
