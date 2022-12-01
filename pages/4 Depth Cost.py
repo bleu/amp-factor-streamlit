@@ -16,13 +16,13 @@ if st.session_state.get("pool_id") != pool_id:
   st.session_state["balances"] = [float(token["balance"]) for token in st.session_state["pool_data"]["tokens"]]
   st.session_state["names"] = [token["name"] for token in st.session_state["pool_data"]["tokens"]]
   st.session_state["pool_id"] = pool_id
-  st.session_state["names"].reverse()
+  print(st.session_state["names"])
 
 st.header(st.session_state["pool_data"]["name"])
 
 base_amp = float(st.session_state["pool_data"]["amp"])
 
-cost_depth_percentage = st.slider("Cost Depth (%):", min_value=0, max_value=100, value=20)
+input_token = st.selectbox("Select the input token:", st.session_state["names"])
 amp_serie = base_amp*np.append(np.logspace(-3, 0, endpoint=False), np.logspace(0, 3))
 new_amp = st.select_slider('Amp factor', options=amp_serie, value=base_amp)
 
@@ -31,17 +31,27 @@ new_pool = StableSwapBinary(x=st.session_state["balances"][0], y=st.session_stat
 
 dfs = []
 
-for p, tag, amp in zip([pool, new_pool], ["Current", "New"], [base_amp, new_amp]):
-  df = pd.DataFrame()
-  df["Input token"] = st.session_state["names"]
-  df["Balance"] = st.session_state["balances"]
-  df["Amp factor tag"] = tag
-  df["Amp factor value"] = amp
-  df["Current price"] = p.calculate_spot_price(df["Balance"])
-  df["Target price"] = df["Current price"]*(1-(cost_depth_percentage/100))
-  df["Value for 2% Depth"] = p.calculate_value_to_spot_price(df["Balance"], df["Target price"])
-  dfs.append(df)
+# hardcoded for binary pool
+input_token_index = st.session_state["names"].index(input_token)
+indexes_to_plot = [i for i in range(len(st.session_state["names"])) if i != input_token_index]
+
+for p, amp_tag, amp in zip([pool, new_pool], ["Current", "New"], [base_amp, new_amp]):
+  for price_tag, price in zip(["-2%", "+2%"], [-2, 2]):
+    df = pd.DataFrame()
+    df["Pair token"] = np.array(st.session_state["names"])[indexes_to_plot]
+    df["Balance"] = np.array(st.session_state["balances"])[indexes_to_plot]
+    df["Amp factor"] = amp_tag
+    df["Amp factor value"] = amp
+
+    # considering 2 percentage of cost change
+    df["Current price"] = p.calculate_spot_price(df["Balance"])
+    df["Price change"] = price_tag
+    df["Price Target"] = df["Current price"]*(1+(price/100))
+    df["Cost"] = p.calculate_value_to_spot_price(df["Balance"], df["Price Target"])
+    dfs.append(df)
 
 df = pd.concat(dfs)
-fig = px.bar(df, x='Input token', y="Value for 2% Depth", color="Amp factor tag", barmode="group")
+fig = px.bar(df, x='Pair token', y="Cost", color="Amp factor", facet_col="Price change", barmode="group")
+title = "2% Depth Cost Analysis for {}".format(input_token)
+fig.update_layout(title=title, yaxis_title=input_token)
 st.plotly_chart(fig, use_container_width=True)
