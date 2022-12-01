@@ -14,7 +14,6 @@ class Components():
       """
 
   def binary_balance_conteiner(self, token_data_x, token_data_y):
-
     total_amount_pool = float(token_data_x["balance"]) + float(token_data_y["balance"])
     return components.html(
       f"""
@@ -23,5 +22,5 @@ class Components():
           {self.balance_container_as_text(token_data_x,total_amount_pool)}
           {self.balance_container_as_text(token_data_y,total_amount_pool)}
         </div>
-      """,
+      """
     )

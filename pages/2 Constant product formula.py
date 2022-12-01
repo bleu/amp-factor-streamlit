@@ -8,12 +8,13 @@ st.title('Constant product formula')
 
 balance_x = st.number_input('Insert the initial amount of token X', value=10, step=1)
 balance_y = st.number_input('Insert the initial amount of token Y', value=10, step=1)
+type_of_tokens = ['','X','Y']
 
 uniswap = Uniswap(x=balance_x, y=balance_y)
 
 st.write('K is equal to ', uniswap.constant)
 
-type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
+type_token_sell = st.selectbox(label="Which token you want to sell?", options=type_of_tokens)
 
 x = np.linspace(1, uniswap.constant,num=uniswap.constant)
 y = np.linspace(1, uniswap.constant,num=uniswap.constant)
@@ -21,7 +22,7 @@ y = np.linspace(1, uniswap.constant,num=uniswap.constant)
 fig = px.line(x=x, y=(uniswap.constant/x), title='Constant product formula Pool Chart')
 
 if type_token_sell:
-  tokens_data = uniswap.define_sell_buy(type_token_sell,balance_x,balance_y)
+  tokens_data = uniswap.define_binary_sell_buy(type_of_tokens, type_token_sell,balance_x, balance_y)
   type_token_buy = tokens_data['type_token_buy']
   initial_amount_sell = tokens_data['initial_amount_sell']
   initial_amount_buy = tokens_data['initial_amount_buy']
