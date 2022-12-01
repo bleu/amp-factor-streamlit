@@ -4,7 +4,9 @@ import pandas as pd
 import numpy as np
 from utils.queries import Subgraph
 from utils.market_makers import LinearInvariant, Uniswap, StableSwapBinary
+from utils.html_components import Components
 
+html_components = Components()
 st.title('Stable curve simulation')
 pool_id = st.text_input('Pool id', value='0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d')
 
@@ -21,6 +23,8 @@ st.header(st.session_state["pool_data"]["name"])
 base_x = float(st.session_state["x_data"]["balance"])
 base_y = float(st.session_state["y_data"]["balance"])
 base_amp = float(st.session_state["pool_data"]["amp"])
+
+html_components.binary_balance_conteiner(st.session_state["x_data"],st.session_state["y_data"])
 
 amp_series = base_amp*np.append(np.logspace(-3, 0, endpoint=False), np.logspace(0, 3))
 
