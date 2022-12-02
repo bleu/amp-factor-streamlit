@@ -76,6 +76,10 @@ class Uniswap(MarketMaker):
   
   def calculate_spot_price(self, x):
     return self.constant / (x**2)
+  
+  def calculate_value_to_spot_price(self, initial_value, price):
+    new_value = (self.constant / price) ** (1/2)
+    return abs(initial_value - new_value)
 
   def define_sell_buy(self, type_token_sell, balance_x, balance_y):
     if type_token_sell == 'X':
@@ -132,6 +136,18 @@ class StableSwapBinary(MarketMaker):
     part221 = (self.amp*self.constant)+((self.constant**2)*0.25)-(self.amp*x)
     part222 = 1/(self.amp+x)
     return part1*(part21+(part221*part222))
+
+
+  def calculate_value_to_spot_price(self, initial_value, price):
+    part111 = 4*(self.amp**2)*price
+    part112 = 4*self.amp*price*self.constant
+    part113 = price*(self.constant**2)
+    part11 = (part111+part112+part113)**(1/2)
+    part12 = 2*self.amp*price
+    part1 = part11-2*self.amp*price
+    part2 = 2*price
+    new_value = part1/part2
+    return abs(initial_value-new_value)
 
   def calculate_trade(): 
     pass
