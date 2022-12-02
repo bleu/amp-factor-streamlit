@@ -12,9 +12,9 @@ pool_id = st.text_input('Pool id', value='0x2d011adf89f0576c9b722c28269fcb5d50c2
 if st.session_state.get("pool_id") != pool_id:
   subgraph = Subgraph()
   response = subgraph.query_pool_by_id(pool_id)
+  st.session_state["names"] = [token["name"] for token in st.session_state["pool_data"]["tokens"]]
   st.session_state["pool_data"] = response["pool"]
   st.session_state["balances"] = [float(token["balance"]) for token in st.session_state["pool_data"]["tokens"]]
-  st.session_state["names"] = [token["name"] for token in st.session_state["pool_data"]["tokens"]]
   st.session_state["pool_id"] = pool_id
 
 st.header(st.session_state["pool_data"]["name"])
