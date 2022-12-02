@@ -16,7 +16,6 @@ if st.session_state.get("pool_id") != pool_id:
   st.session_state["balances"] = [float(token["balance"]) for token in st.session_state["pool_data"]["tokens"]]
   st.session_state["names"] = [token["name"] for token in st.session_state["pool_data"]["tokens"]]
   st.session_state["pool_id"] = pool_id
-  print(st.session_state["names"])
 
 st.header(st.session_state["pool_data"]["name"])
 
