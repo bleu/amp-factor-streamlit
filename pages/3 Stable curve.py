@@ -26,7 +26,6 @@ base_amp = float(st.session_state["pool_data"]["amp"])
 type_of_tokens = ['',f'{st.session_state["x_data"]["name"]}',f'{st.session_state["y_data"]["name"]}']
 
 html_components.binary_balance_conteiner(st.session_state["x_data"],st.session_state["y_data"])
-type_token_sell = st.selectbox(label="Which token you want to sell?", options=type_of_tokens)
 
 amp_series = base_amp*np.append(np.logspace(-3, 0, endpoint=False), np.logspace(0, 3))
 
