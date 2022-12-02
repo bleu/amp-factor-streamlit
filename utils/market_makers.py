@@ -17,7 +17,7 @@ class MarketMaker(ABC):
     pass
 
   @abstractmethod
-  def define_sell_buy(self):
+  def define_binary_sell_buy(self):
     pass
 
   @abstractmethod
@@ -34,7 +34,10 @@ class LinearInvariant(MarketMaker):
   def calculate_spot_price(self):
     return 1
 
-  def define_sell_buy(self, type_token_sell, balance_x, balance_y):
+  def define_binary_sell_buy(self, type_of_tokens, type_token_sell, balance_x, balance_y):
+    type_of_tokens = list(filter(None, type_of_tokens))
+    print(type_of_tokens)
+
     if type_token_sell == 'X':
       tokensData = {
         'type_token_buy': 'Y',
@@ -81,7 +84,7 @@ class Uniswap(MarketMaker):
     new_value = (self.constant / price) ** (1/2)
     return abs(initial_value - new_value)
 
-  def define_sell_buy(self, type_token_sell, balance_x, balance_y):
+  def define_binary_sell_buy(self, type_token_sell, balance_x, balance_y):
     if type_token_sell == 'X':
       tokensData = {
         'type_token_buy': 'Y',
@@ -151,6 +154,7 @@ class StableSwapBinary(MarketMaker):
 
   def calculate_trade(): 
     pass
-  
-  def define_sell_buy():
+
+  def define_binary_sell_buy():
     pass
+
