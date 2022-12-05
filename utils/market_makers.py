@@ -116,10 +116,6 @@ class StableSwapBinary(MarketMaker):
     part222 = 1/(self.amp+x)
     return part1*(part21+(part221*part222))
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
   def calculate_value_to_spot_price(self, initial_value, price):
     part111 = 4*(self.amp**2)*price
     part112 = 4*self.amp*price*self.constant

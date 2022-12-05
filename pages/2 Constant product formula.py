@@ -24,11 +24,7 @@ y = np.linspace(1, uniswap.constant,num=uniswap.constant)
 fig = px.line(x=x, y=(uniswap.constant/x), title='Constant product formula Pool Chart')
 
 if type_token_sell:
-<<<<<<< HEAD
-  tokens_data = uniswap.define_binary_sell_buy(type_of_tokens, type_token_sell,balance_x, balance_y)
-=======
   tokens_data = uniswap.define_binary_sell_buy(type_token_sell,x_data, y_data)
->>>>>>> main
   type_token_buy = tokens_data['type_token_buy']
   initial_amount_sell = tokens_data['initial_amount_sell']
   initial_amount_buy = tokens_data['initial_amount_buy']
