@@ -128,4 +128,5 @@ class StableSwapBinary(MarketMaker):
     return abs(initial_value-new_value)
 
   def calculate_trade(): 
+    #todo
     pass
