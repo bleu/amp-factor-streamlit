@@ -2,55 +2,54 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 import numpy as np
+from utils.market_makers import Uniswap
 
 st.title('Constant product formula')
 
-amountX = st.number_input('Insert the initial amount of token X', value=10, step=1)
-amountY = st.number_input('Insert the initial amount of token Y', value=10, step=1)
+balance_x = st.number_input('Insert the initial amount of token X', value=10, step=1)
+balance_y = st.number_input('Insert the initial amount of token Y', value=10, step=1)
+x_data = {'name':'X', 'balance': balance_x}
+y_data = {'name':'Y', 'balance': balance_y}
+type_of_tokens = ['','X','Y']
 
-k = amountX*amountY
+uniswap = Uniswap(x=balance_x, y=balance_y)
 
-st.write('K is equal to ', k)
+st.write('K is equal to ', uniswap.constant)
 
-typeTokenSell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
+type_token_sell = st.selectbox(label="Which token you want to sell?", options=type_of_tokens)
 
-x = np.linspace(0, k,num=k)
-y = np.linspace(0, k,num=k)
+x = np.linspace(1, uniswap.constant,num=uniswap.constant)
+y = np.linspace(1, uniswap.constant,num=uniswap.constant)
 
-fig = px.line(x=x, y=(k/x), title='Constant product formula Pool Chart')
+fig = px.line(x=x, y=(uniswap.constant/x), title='Constant product formula Pool Chart')
 
-if typeTokenSell:
+if type_token_sell:
+  tokens_data = uniswap.define_binary_sell_buy(type_token_sell,x_data, y_data)
+  type_token_buy = tokens_data['type_token_buy']
+  initial_amount_sell = tokens_data['initial_amount_sell']
+  initial_amount_buy = tokens_data['initial_amount_buy']
+  amount_token_sell = st.number_input(label='How much of token {} you want to sell?'.format(type_token_sell),value=2.0, step=0.1,max_value=float(uniswap.constant), min_value=0.1)
 
-  if typeTokenSell == 'X':
-    typeTokenBuy = 'Y'
-    initialAmountSell = amountX
-    initialAmountBuy = amountY
-    amountTokenSell = st.number_input(label='How much of token {} you want to sell?'.format(typeTokenSell),value=2.0, step=0.1,max_value=float(k), min_value=0.1)
+  transaction = uniswap.calculate_trade(initial_amount_sell, initial_amount_buy, amount_token_sell)
+  amount_token_buy = transaction['amount_token_buy']
+  st.write('You will receive', amount_token_buy, 'of token', type_token_buy)
 
-    if amountTokenSell != 0 :
-      amountTokenBuy = (initialAmountBuy*amountTokenSell)/(initialAmountSell+amountTokenSell)
-      st.write('You will receive', amountTokenBuy, 'of token', typeTokenBuy)
+  price = transaction['price']
 
-      price = amountTokenBuy/amountTokenSell
-      st.write('You paid 1 Y for', price, 'X')
+  if type_token_sell == "X":
+    st.write('You paid 1 Y for', price, 'X')
+    fig.add_scatter(mode="markers",x=transaction['transaction_sell'],y=transaction['transaction_buy'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
+      '%{text}',
+      'X: %{x}',
+      'Y: %{y}',
+    ]))
+  else:
+    st.write('You paid 1 X for', price, 'Y')
 
-      finalAmountSell = initialAmountSell+amountTokenSell
-      finalAmountBuy = initialAmountBuy-amountTokenBuy
-      
-      transaction = pd.DataFrame({
-        'transactionSell': [initialAmountSell,finalAmountSell],
-        'transactionBuy': [initialAmountBuy,finalAmountBuy],
-        'label': ['Before the trade', 'After the trade']
-      })
-
-      fig.add_scatter(mode="markers",x=transaction['transactionSell'],y=transaction['transactionBuy'], text=transaction['label'],name="Transaction variation",        hovertemplate='<br>'.join([
-              '%{text}',
-              'X: %{x}',
-              'Y: %{y}',
-          ]),
-      )
-    else: st.markdown(f'<p style="color:#C52233;">Please select the amount of token {typeTokenSell} you want to sell</p>', unsafe_allow_html=True)
-    
-
+    fig.add_scatter(mode="markers",x=transaction['transaction_buy'],y=transaction['transaction_sell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
+        '%{text}',
+        'X: %{x}',
+        'Y: %{y}',
+    ]))
 
 st.plotly_chart(fig, use_container_width=True)
