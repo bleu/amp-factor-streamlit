@@ -68,6 +68,7 @@ if type_token_sell:
 
     html_components.amp_price_conteiner(current_amp,new_amp)
 
+    #todo find a better way to to this hover
     hover = "<br>%{text}<br>"
     hover += "{}: ".format(st.session_state["x_data"]["name"])
     hover += "<b>%{x}</b><br>"
