@@ -5,6 +5,7 @@ import numpy as np
 from utils.queries import Subgraph
 from utils.market_makers import LinearInvariant, Uniswap, StableSwapBinary
 from utils.html_components import Components
+from utils.streamlit import Streamlit
 
 html_components = Components()
 st.title('Stable curve simulation')
@@ -13,10 +14,11 @@ pool_id = st.text_input('Pool id', value='0x2d011adf89f0576c9b722c28269fcb5d50c2
 if st.session_state.get("pool_id") != pool_id:
   subgraph = Subgraph()
   response = subgraph.query_pool_by_id(pool_id)
-  st.session_state["pool_data"] = response["pool"]
-  st.session_state["x_data"] = st.session_state["pool_data"]["tokens"][0]
-  st.session_state["y_data"] = st.session_state["pool_data"]["tokens"][1]
-  st.session_state["pool_id"] = pool_id
+  st_utils = Streamlit()
+  st_utils.initiate_session_state("pool_data", response["pool"])
+  st_utils.initiate_session_state("x_data", st.session_state["pool_data"]["tokens"][0])
+  st_utils.initiate_session_state("y_data", st.session_state["pool_data"]["tokens"][1])
+  st_utils.initiate_session_state("pool_id", pool_id)
 
 st.header(st.session_state["pool_data"]["name"])
 
