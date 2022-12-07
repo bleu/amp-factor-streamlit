@@ -8,12 +8,15 @@ st.title('Linear Invariant')
 
 balance_x = st.number_input('Insert the initial amount of token X', value=2, step=1)
 balance_y = st.number_input('Insert the initial amount of token Y', value=2, step=1)
+x_data = {'name':'X', 'balance': balance_x}
+y_data = {'name':'Y', 'balance': balance_y}
+type_of_tokens = ['','X','Y']
 
 linear_invariant = LinearInvariant(x=balance_x, y=balance_y)
 
 st.write('K is equal to ', linear_invariant.constant)
 
-type_token_sell = st.selectbox(label="Which token you want to sell?", options=['','X','Y'])
+type_token_sell = st.selectbox(label="Which token you want to sell?", options=type_of_tokens)
 
 x = np.linspace(0, linear_invariant.constant)
 y = np.linspace(0, linear_invariant.constant)
@@ -21,7 +24,7 @@ y = np.linspace(0, linear_invariant.constant)
 fig = px.line(x=x, y= linear_invariant.constant-x, title='Line Invariant Pool Chart')
 
 if type_token_sell:
-  tokens_data = linear_invariant.define_sell_buy(type_token_sell,balance_x,balance_y)
+  tokens_data = linear_invariant.define_binary_sell_buy(type_token_sell, x_data, y_data)
   type_token_buy = tokens_data['type_token_buy']
   initial_amount_sell = tokens_data['initial_amount_sell']
   initial_amount_buy = tokens_data['initial_amount_buy']
