@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+import plotly.graph_objects as go
 import pandas as pd
 import numpy as np
 from utils.queries import Subgraph
@@ -41,15 +42,28 @@ x_data_name = st.session_state["x_data"]["name"]
 df[x_data_name] = np.linspace(linear_invariant.constant*0.2, linear_invariant.constant*0.8, num=100)
 df["Current curve"] = current_stable_swape.calculate_y(df[x_data_name])
 df["New curve"] = new_stable_swape.calculate_y(df[x_data_name])
-df["Linear invariant"] = linear_invariant.calculate_y(df[x_data_name])
 
 df["Current spot price"] = current_stable_swape.calculate_spot_price(df[x_data_name])
 df["New spot price"] = new_stable_swape.calculate_spot_price(df[x_data_name])
 
 type_token_sell = st.selectbox(label="Which token you want to sell?", options=type_of_tokens)
 
-fig = px.line(df, x=x_data_name, y=["Current curve", "New curve", "Linear invariant"], 
-              hover_data=["Current spot price", "New spot price"], title='StableSwap simulation')
+fig = go.Figure(go.Scatter(
+    name = "Default Amp Factor",
+    x = df[x_data_name],
+    y = df["Current curve"],
+    hovertemplate =
+    '<b>Price: %{text}</b>',
+    text = df["Current spot price"].map('{:.5f}'.format)))
+
+fig.add_trace(go.Scatter(
+    name = "New Amp Factor",
+    x = df[x_data_name],
+    y = df["New curve"],
+    hovertemplate = '<b>Price: %{text}</b>',
+    text = df["New spot price"].map('{:.5f}'.format)))
+
+fig.update_layout(hovermode='x unified')
 
 if type_token_sell:
   tokens_data = new_stable_swape.define_binary_sell_buy(type_token_sell, st.session_state["x_data"], st.session_state["y_data"])
@@ -76,29 +90,29 @@ if type_token_sell:
     hover += "<b>%{y}</b><br>"
 
     if type_token_sell == st.session_state["x_data"]["name"]:
-      st.write('You paid 1', st.session_state["y_data"]["name"], 'for', new_transaction['price'],  st.session_state["x_data"]["name"])
-      fig.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['transaction_buy'], text=new_transaction['label'],name="New Amp",hovertemplate=hover,         
-        marker=dict(
-            color='#ED3C1D',
-            size=7,
-        ))
-      fig.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['transaction_buy'], text=current_transaction['label'],name="Default Amp", hovertemplate=hover,         
+      st.write('You paid',new_transaction['price'], st.session_state["y_data"]["name"], 'for 1',  st.session_state["x_data"]["name"])
+      fig.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['transaction_buy'], text=current_transaction['label'],name="", hovertemplate=hover,         
         marker=dict(
             color='#2533F8',
             size=7,
-        ))
+        ), showlegend=False)
+      fig.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['transaction_buy'], text=new_transaction['label'],name="",hovertemplate=hover,         
+        marker=dict(
+            color='#ED3C1D',
+            size=7,
+        ), showlegend=False)
     if type_token_sell == st.session_state["y_data"]["name"]:
       st.write('You paid 1', st.session_state["x_data"]["name"], 'for', new_transaction['price'],  st.session_state["y_data"]["name"])
-      fig.add_scatter(mode="markers",x=new_transaction['transaction_buy'],y=new_transaction['transaction_sell'], text=new_transaction['label'],name="New Amp",hovertemplate=hover,         
-        marker=dict(
-            color='#ED3C1D',
-            size=7,
-        ))
-      fig.add_scatter(mode="markers",x=current_transaction['transaction_buy'],y=current_transaction['transaction_sell'], text=current_transaction['label'],name="Default Amp", hovertemplate=hover,         
+      fig.add_scatter(mode="markers",x=current_transaction['transaction_buy'],y=current_transaction['transaction_sell'], text=current_transaction['label'],name="", hovertemplate=hover,         
         marker=dict(
             color='#2533F8',
             size=7,
-        ))
+        ), showlegend=False)
+      fig.add_scatter(mode="markers",x=new_transaction['transaction_buy'],y=new_transaction['transaction_sell'], text=new_transaction['label'],name="",hovertemplate=hover,         
+        marker=dict(
+            color='#ED3C1D',
+            size=7,
+        ), showlegend=False)
 
 fig.update_layout(yaxis_title=st.session_state["y_data"]["name"])
 

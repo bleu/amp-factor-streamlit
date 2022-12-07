@@ -34,7 +34,7 @@ class Components():
               <span class="font-bold">{amp:.2f}</span>
             </p>
             <p>Will receive <span class="font-bold">{amount_token_buy:.2f}</span> of {type_token_buy}</p>
-            <p>Price: {price} | <span class="text-green-300">{100-((price/default_price)*100):.2f}% 🡡</span></p>
+            <p>Price: {price} | <span class="text-green-300">{100-((price/default_price)*100):.2f}% &#8593;</span></p>
           </div>
         """
     elif price_variance < 0:
@@ -44,7 +44,7 @@ class Components():
               <span class="font-bold">{amp:.2f}</span>
             </p>
             <p>Will receive <span class="font-bold">{amount_token_buy:.2f}</span> of {type_token_buy}</p>
-            <p>Price: {price} | <span class="text-red-300">{100-((price/default_price)*100):.2f}% 🡣</span></p>
+            <p>Price: {price} | <span class="text-red-300">{100-((price/default_price)*100):.2f}% &#8595;</span></p>
           </div>
         """
     else:
