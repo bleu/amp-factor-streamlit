@@ -20,7 +20,7 @@ st_utils = Streamlit()
 st_utils.initiate_session_state("pool_data_depth_cost", response["pool"])
 st_utils.initiate_session_state("names", [token["name"] for token in st.session_state["pool_data_depth_cost"]["tokens"]])
 st_utils.initiate_session_state("balances", [float(token["balance"]) for token in st.session_state["pool_data_depth_cost"]["tokens"]])
-st_utils.initiate_session_state("pool_id_depth_cost", pool_id_depth_cost)
+st_utils.initiate_session_state("pool_id", pool_id_depth_cost)
 
 st.header(st.session_state["pool_data_depth_cost"]["name"])
 
