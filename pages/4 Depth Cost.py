@@ -4,23 +4,27 @@ import pandas as pd
 import numpy as np
 from utils.queries import Subgraph
 from utils.market_makers import StableSwapBinary
+from utils.streamlit import Streamlit
 
 st.title("Depth Cost")
 
-pool_id = st.text_input('Pool id', value='0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d')
+## tem alguma variavel sendo compartilhada entre as duas páginas e por isso da dando ruim
+if "pool_id" not in st.session_state:
+  st.session_state["pool_id"] = '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d'
 
-if st.session_state.get("pool_id") != pool_id:
-  subgraph = Subgraph()
-  response = subgraph.query_pool_by_id(pool_id)
-  st.session_state["pool_data"] = response["pool"]
-  st.session_state["balances"] = [float(token["balance"]) for token in st.session_state["pool_data"]["tokens"]]
-  st.session_state["names"] = [token["name"] for token in st.session_state["pool_data"]["tokens"]]
-  st.session_state["pool_id"] = pool_id
-  print(st.session_state["names"])
+pool_id_depth_cost = st.text_input('Pool id', value=st.session_state["pool_id"])
 
-st.header(st.session_state["pool_data"]["name"])
+subgraph = Subgraph()
+response = subgraph.query_pool_by_id(pool_id_depth_cost)
+st_utils = Streamlit()
+st_utils.initiate_session_state("pool_data_depth_cost", response["pool"])
+st_utils.initiate_session_state("names", [token["name"] for token in st.session_state["pool_data_depth_cost"]["tokens"]])
+st_utils.initiate_session_state("balances", [float(token["balance"]) for token in st.session_state["pool_data_depth_cost"]["tokens"]])
+st_utils.initiate_session_state("pool_id_depth_cost", pool_id_depth_cost)
 
-base_amp = float(st.session_state["pool_data"]["amp"])
+st.header(st.session_state["pool_data_depth_cost"]["name"])
+
+base_amp = float(st.session_state["pool_data_depth_cost"]["amp"])
 
 input_token = st.selectbox("Select the input token:", st.session_state["names"])
 amp_serie = base_amp*np.append(np.logspace(-3, 0, endpoint=False), np.logspace(0, 3))
