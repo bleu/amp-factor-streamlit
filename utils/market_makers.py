@@ -16,6 +16,10 @@ class MarketMaker(ABC):
   def calculate_spot_price(self):
     pass
 
+  @abstractmethod
+  def calculate_trade(self):
+    pass
+
   def define_binary_sell_buy(self, type_token_sell, x_data, y_data):
     if x_data["name"] == type_token_sell:
       tokensData = {
@@ -31,12 +35,20 @@ class MarketMaker(ABC):
         'initial_amount_buy': x_data["balance"],
       }
       return tokensData
-
-  def calculate_trade(self, initial_amount_sell, initial_amount_buy, amount_token_sell): 
-    initial_amount_sell = float(initial_amount_sell)
-    initial_amount_buy = float(initial_amount_buy)
-    amount_token_sell = float(amount_token_sell)
     
+class LinearInvariant(MarketMaker):
+  def get_constant(self, x, y):
+    return x+y
+  
+  def calculate_y(self, x):
+    return self.constant - x
+  
+  def calculate_spot_price(self):
+    return 1
+
+  def calculate_trade(self, initial_amount_sell, initial_amount_buy, amount_token_sell):
+    amount_token_buy = initial_amount_sell + initial_amount_buy + amount_token_sell - self.constant
+    price = amount_token_buy/amount_token_sell
     final_amount_sell = initial_amount_sell+amount_token_sell
     final_amount_buy = self.calculate_y(final_amount_sell)
     amount_token_buy = initial_amount_buy-final_amount_buy
@@ -52,16 +64,6 @@ class MarketMaker(ABC):
 
     return transaction
 
-class LinearInvariant(MarketMaker):
-  def get_constant(self, x, y):
-    return x+y
-  
-  def calculate_y(self, x):
-    return self.constant - x
-  
-  def calculate_spot_price(self):
-    return 1
-
 class Uniswap(MarketMaker):
   def get_constant(self, x, y):
     return x*y
@@ -75,6 +77,22 @@ class Uniswap(MarketMaker):
   def calculate_value_to_spot_price(self, initial_value, price):
     new_value = (self.constant / price) ** (1/2)
     return abs(initial_value - new_value)
+
+  def calculate_trade(self, initial_amount_sell, initial_amount_buy, amount_token_sell):
+    amount_token_buy = (initial_amount_buy * amount_token_sell) / (initial_amount_sell+amount_token_sell)
+    price = amount_token_buy/amount_token_sell
+    final_amount_sell = initial_amount_sell+amount_token_sell
+    final_amount_buy = initial_amount_buy-amount_token_buy
+
+    transaction = {
+      'amount_token_buy': amount_token_buy,
+      'price': price,
+      'transaction_sell': [initial_amount_sell,final_amount_sell],
+      'transaction_buy': [initial_amount_buy,final_amount_buy],
+      'label': ['Before the trade', 'After the trade']
+    }
+
+    return transaction
 
 class StableSwapBinary(MarketMaker):
   def __init__(self, **kwargs):
@@ -111,4 +129,5 @@ class StableSwapBinary(MarketMaker):
     new_value = part1/part2
     return abs(initial_value-new_value)
 
-
+  def calculate_trade(): 
+    pass
