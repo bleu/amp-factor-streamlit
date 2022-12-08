@@ -35,7 +35,7 @@ class MarketMaker(ABC):
         'initial_amount_buy': x_data["balance"],
       }
       return tokensData
-
+    
 class LinearInvariant(MarketMaker):
   def get_constant(self, x, y):
     return x+y
@@ -50,7 +50,9 @@ class LinearInvariant(MarketMaker):
     amount_token_buy = initial_amount_sell + initial_amount_buy + amount_token_sell - self.constant
     price = amount_token_buy/amount_token_sell
     final_amount_sell = initial_amount_sell+amount_token_sell
-    final_amount_buy = initial_amount_buy-amount_token_buy
+    final_amount_buy = self.calculate_y(final_amount_sell)
+    amount_token_buy = initial_amount_buy-final_amount_buy
+    price = amount_token_buy/amount_token_sell
 
     transaction = {
       'amount_token_buy': amount_token_buy,
