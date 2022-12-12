@@ -8,7 +8,6 @@ from utils.streamlit import Streamlit
 
 st.title("Depth Cost")
 
-## tem alguma variavel sendo compartilhada entre as duas páginas e por isso da dando ruim
 if "pool_id" not in st.session_state:
   st.session_state["pool_id"] = '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d'
 

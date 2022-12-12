@@ -37,15 +37,14 @@ if type_token_sell:
   price = transaction['price']
 
   if type_token_sell == "X":
-    st.write('You paid 1 Y for', price, 'X')
+    st.write('You paid', price,'Y for 1 X')
     fig.add_scatter(mode="markers",x=transaction['transaction_sell'],y=transaction['transaction_buy'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
       '%{text}',
       'X: %{x}',
       'Y: %{y}',
     ]))
   else:
-    st.write('You paid 1 X for', price, 'Y')
-
+    st.write('You paid', price,'X for 1 Y')
     fig.add_scatter(mode="markers",x=transaction['transaction_buy'],y=transaction['transaction_sell'], text=transaction['label'],name="Transaction variation", hovertemplate='<br>'.join([
         '%{text}',
         'X: %{x}',
