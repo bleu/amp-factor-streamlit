@@ -6,6 +6,13 @@ from utils.queries import Subgraph
 from utils.market_makers import LinearInvariant, Uniswap, StableSwapBinary
 from utils.streamlit import Streamlit
 
+st.set_page_config(
+   page_title="Simulation | Amp Factor",
+   page_icon="📊",
+   initial_sidebar_state="expanded",
+   layout="wide",
+)
+
 st.title('Stable curve simulation')
 if "pool_id" not in st.session_state:
   st.session_state["pool_id"] = '0x2d011adf89f0576c9b722c28269fcb5d50c2d17900020000000000000000024d'
