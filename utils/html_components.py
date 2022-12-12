@@ -61,7 +61,7 @@ class Components():
         """
 
 
-  def amp_price_conteiner(self, current_amp, new_amp,type_token_sell):
+  def amp_price_conteiner(self, current_amp, new_amp, type_token_sell):
     if current_amp['amp'] == new_amp['amp']:
       return components.html(
         f"""
