@@ -121,18 +121,23 @@ Now, in order to calculate the in ginen price function, we have to invert this f
 $$
 y' + \frac{1}{2} = \cfrac{C_1+x+\cfrac{C_2}{x^2}}{2\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
 $$
+
 $$
 2y' + 1 = \cfrac{\cfrac{C_1x^2+x^3+C_2}{x^2}}{\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
 $$
+
 $$
 (2y' + 1)^2 = \cfrac{\cfrac{(C_1x^2+x^3+C_2)^2}{x^4}}{(C_1+x)^2-4\cfrac{C_2}{x}}
 $$
+
 $$
 (2y' + 1)^2 = \cfrac{\cfrac{(C_1x^2+x^3+C_2)^2}{x^4}}{\cfrac{x(C_1+x)^2-4C_2}{x}}
 $$
+
 $$
 (2y' + 1)^2 = \cfrac{(C_1x^2+x^3+C_2)^2}{x^3(x(C_1+x)^2-4C_2)}
 $$
+
 $$
 (2y' + 1)^2(x^3(x(C_1+x)^2-4C_2)) = (C_1x^2+x^3+C_2)^2
 $$
