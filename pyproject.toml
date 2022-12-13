@@ -13,6 +13,7 @@ streamlit = "1.13.0"
 gql = "2.0.0"
 web3 = "5.23.0"
 eth-abi = "2.1.1"
+balancerv2cad = "^0.1.93"
 
 [tool.poetry.dev-dependencies]
 jupyter = "^1.0.0"
