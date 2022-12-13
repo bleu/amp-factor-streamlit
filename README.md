@@ -118,6 +118,7 @@ y'(x) =  \frac{b(x)-2c'(x)}{2\sqrt{b(x)^2-4c(x)}} -\frac{1}{2}
 $$
 
 Now, in order to calculate the in ginen price function, we have to invert this function.
+
 $$
 y' + \frac{1}{2} = \cfrac{C_1+x+\cfrac{C_2}{x^2}}{2\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
 $$
@@ -147,6 +148,7 @@ $$
 $$
 
 Solving this equation, we get a polynominal equation can be writen as:
+
 $$
 f_6(y')x^6 + f_5(y')x^5 + f_4(y')x^4 + f_3(y')x^3 + f_2(y')x^4 + f_1(y')x^4 + f_0(y') = 0
 $$
