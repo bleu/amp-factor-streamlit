@@ -114,8 +114,8 @@ y'(x) = \cfrac{-1 + \frac{b(x)-2c'(x)}{\sqrt{b(x)^2-4c(x)}}}{2}
 $$
 
 $$
-y'(x) =  \frac{b(x)-2c'(x)}{2\sqrt{b(x)^2-4c(x)}} -0,5
+y'(x) =  \frac{b(x)-2c'(x)}{2\sqrt{b(x)^2-4c(x)}} -\frac{1}{2}
 $$
 
-So, the final formula is:
+Now, in order to calculate the in ginen price function, we 
 
