@@ -135,23 +135,23 @@ if type_token_sell:
   html_components.amp_price_conteiner(current_amp,custom_amp, type_token_sell)
 
   if type_token_sell == st.session_state["x_data"]["name"]:
-    pool_fig.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['transaction_buy'], text=current_transaction['label'],name="", hovertemplate='%{x} ; %{y}',        
+    pool_fig.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['transaction_buy'], text=current_transaction['label'],name="", hovertemplate='%{text} %{x} ; %{y}',        
       marker=dict(
           color='#2533F8',
           size=7,
       ), showlegend=False)
-    pool_fig.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['transaction_buy'], text=new_transaction['label'],name="", hovertemplate='%{x} ; %{y}',           
+    pool_fig.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['transaction_buy'], text=new_transaction['label'],name="", hovertemplate='%{text} %{x} ; %{y}',           
       marker=dict(
           color='#ED3C1D',
           size=7,
       ), showlegend=False)
   if type_token_sell == st.session_state["y_data"]["name"]:
-    pool_fig.add_scatter(mode="markers",x=current_transaction['transaction_buy'],y=current_transaction['transaction_sell'], text=current_transaction['label'],name="", hovertemplate='%{x} ; %{y}',       
+    pool_fig.add_scatter(mode="markers",x=current_transaction['transaction_buy'],y=current_transaction['transaction_sell'], text=current_transaction['label'],name="", hovertemplate='%{text} %{x} ; %{y}',       
       marker=dict(
           color='#2533F8',
           size=7,
       ), showlegend=False)
-    pool_fig.add_scatter(mode="markers",x=new_transaction['transaction_buy'],y=new_transaction['transaction_sell'], text=new_transaction['label'],name="", hovertemplate='%{x} ; %{y}',         
+    pool_fig.add_scatter(mode="markers",x=new_transaction['transaction_buy'],y=new_transaction['transaction_sell'], text=new_transaction['label'],name="", hovertemplate='%{text} %{x} ; %{y}',         
       marker=dict(
           color='#ED3C1D',
           size=7,
@@ -160,3 +160,25 @@ if type_token_sell:
 pool_fig.update_layout(yaxis_title=st.session_state["y_data"]["name"])
 
 st.plotly_chart(pool_fig, use_container_width=True)
+
+if type_token_sell:
+  col1.subheader(f'With amp factor {base_amp}')
+  initial_spot_price = current_stable_swape.calculate_spot_price(current_transaction['transaction_sell'][0])
+  final_spot_price = current_stable_swape.calculate_spot_price(current_transaction['transaction_sell'][1])
+  current_price = current_transaction['price']
+  current_price_impact = current_stable_swape.calculate_price_impact(current_transaction)
+  col1.write(f'Price impact: {current_price_impact*100}%')
+  col1.write(f'Initial Spot Price: {initial_spot_price}')
+  col1.write(f'Final Spot Price: {final_spot_price}')
+  col1.write(f'Transaction price: {current_price}')
+
+  col2.subheader(f'With amp factor {new_amp}')
+  initial_spot_price = new_stable_swape.calculate_spot_price(new_transaction['transaction_sell'][0])
+  final_spot_price = new_stable_swape.calculate_spot_price(new_transaction['transaction_sell'][1])
+  new_price = new_transaction['price']
+  new_price_impact = new_stable_swape.calculate_price_impact(new_transaction)
+  col2.write(f'Price impact: {new_price_impact*100}%')
+  col2.write(f'Initial Spot Price: {initial_spot_price}')
+  col2.write(f'Final Spot Price: {final_spot_price}')
+  col2.write(f'Transaction price: {new_price}')
+
