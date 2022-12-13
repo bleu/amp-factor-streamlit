@@ -49,7 +49,7 @@ where:
 Using Bhaskara and considering just the positive result, it is possible to define:
 
 $$
-y(x) = \cfrac{-b(x) + \sqrt{b(x)^2 + 4a(x)c(x)}}{2a(x)}
+y(x) = \cfrac{-b(x) + \sqrt{b(x)^2 - 4a(x)c(x)}}{2a(x)}
 $$
 
 where:
@@ -69,7 +69,7 @@ $$
 Since $a(x)$ is constant, we can rewrite $y(x)$ as:
 
 $$
-y(x) = \cfrac{-b(x) + \sqrt{b(x)^2 + 4c(x)}}{2}
+y(x) = \cfrac{-b(x) + \sqrt{b(x)^2 - 4c(x)}}{2}
 $$
 
 
@@ -90,7 +90,7 @@ $$
 Then, we can start calculating the derivative of the root square part:
 
 $$
-g(x) = \sqrt{b(x)^2 + 4c(x)}
+g(x) = \sqrt{b(x)^2 - 4c(x)}
 $$
 
 $$
