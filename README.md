@@ -120,33 +120,32 @@ $$
 Now, in order to calculate the in ginen price function, we have to invert this function.
 
 $$
-y' + \frac{1}{2} = \cfrac{C_1+x+\cfrac{C_2}{x^2}}{2\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
+y' + \frac{1}{2} = \cfrac{C_1+x+2\cfrac{C_2}{x^2}}{2\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
 $$
 
 $$
-2y' + 1 = \cfrac{\cfrac{C_1x^2+x^3+C_2}{x^2}}{\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
+2y' + 1 = \cfrac{\cfrac{C_1x^2+x^3+2C_2}{x^2}}{\sqrt{(C_1+x)^2-4\cfrac{C_2}{x}}}
 $$
 
 $$
-(2y' + 1)^2 = \cfrac{\cfrac{(C_1x^2+x^3+C_2)^2}{x^4}}{(C_1+x)^2-4\cfrac{C_2}{x}}
+(2y' + 1)^2 = \cfrac{\cfrac{(C_1x^2+x^3+2C_2)^2}{x^4}}{(C_1+x)^2-4\cfrac{C_2}{x}}
 $$
 
 $$
-(2y' + 1)^2 = \cfrac{\cfrac{(C_1x^2+x^3+C_2)^2}{x^4}}{\cfrac{x(C_1+x)^2-4C_2}{x}}
+(2y' + 1)^2 = \cfrac{\cfrac{(C_1x^2+x^3+2C_2)^2}{x^4}}{\cfrac{x(C_1+x)^2-4C_2}{x}}
 $$
 
 $$
-(2y' + 1)^2 = \cfrac{(C_1x^2+x^3+C_2)^2}{x^3(x(C_1+x)^2-4C_2)}
+(2y' + 1)^2 = \cfrac{(C_1x^2+x^3+2C_2)^2}{x^3(x(C_1+x)^2-4C_2)}
 $$
 
 $$
-(2y' + 1)^2(x^3(x(C_1+x)^2-4C_2)) = (C_1x^2+x^3+C_2)^2
+(2y' + 1)^2(x^3(x(C_1+x)^2-4C_2)) = (C_1x^2+x^3+2C_2)^2
 $$
 
-$$
-(4y'^2 + 4y' + 1)(C_1^2x^4+2C_1x^5+x^6-4C_2x^3) = C_1^2x^4+2C_1x^5+2x^3C_2+2C_1x^2C_2+x^6+C_2^2
-$$
-
+<!-- $$
+8 C_1 x^5 y^2 + 8 C_1 x^5 y + 2 C_1 x^5 + 4 C_1^2 x^4 y^2 + 4 C_1^2 x^4 y + C_1^2 x^4 - 16 C_2 x^3 y^2 - 16 C_2 x^3 y - 4 C_2 x^3 + 4 x^6 y^2 + 4 x^6 y + x^6 = 2 C_1 x^5 + C_1^2 x^4 + 4 C_2 x^3 + 4 C_1 C_2 x^2 + 4 C_2^2 + x^6
+$$ -->
 Solving this equation, we get a polynominal equation can be writen as:
 
 $$
@@ -155,23 +154,23 @@ $$
 
 where:
 $$
-f_6(y')= 4 y^2 + 4
+f_6(y')= 4y'^2 + 4y'
 $$
 
 $$
-f_5(y')=8 C_1 y'^2 + 8 C_1 y'
+f_5(y')= 8 C_1 y'^2 + 8 C_1 y'
 $$
 
 $$
-f_4(y')=4 C_1^2 y^2 + 4 C_1^2 y
+f_4(y')= 4 C_1^2y'^2 + 4 C_1^2y'
 $$
 
 $$
-f_3(y')=- 16 C_2 y^2 - 16 C_2 y - 6 C_2
+f_3(y')= -16 C_2y'^2 - 16 C_2 y' - 8 C_2 
 $$
 
 $$
-f_2(y') = -2C_1C_2
+f_2(y') = -4 C_1 C_2
 $$
 
 $$
@@ -179,7 +178,7 @@ f_1(y') = 0
 $$
 
 $$
-f_0(y') = -C_2^2
+f_0(y') = 4 C_2^2
 $$
 
 Since this is a 6th order plinomial, does not exist an analytical solution. This means, that a numerical approach has to be used.
