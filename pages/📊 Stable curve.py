@@ -38,7 +38,7 @@ else:
   st_utils.initiate_session_state("pool_data", response["pool"])
   st_utils.initiate_session_state("x_data", st.session_state["pool_data"]["tokens"][0])
   st_utils.initiate_session_state("y_data", st.session_state["pool_data"]["tokens"][1])
-  st_utils.initiate_session_state("names", [token["name"] for token in st.session_state["pool_data"]["tokens"]])
+  st_utils.initiate_session_state("names", [token["symbol"] for token in st.session_state["pool_data"]["tokens"]])
   st_utils.initiate_session_state("balances", [float(token["balance"]) for token in st.session_state["pool_data"]["tokens"]])
   st_utils.initiate_session_state("pool", {"pool_id": pool_id, "network": network})
 
