@@ -50,7 +50,7 @@ else:
   base_amp = float(st.session_state["pool_data"]["amp"])
   amp_series = base_amp*np.append(np.logspace(-3, 0, endpoint=False), np.logspace(0, 3))
 
-  balance = px.pie(values=st.session_state["balances"], names=st.session_state["names"], labels=st.session_state["names"])
+  balance = px.pie(values=st.session_state["balances"], names=st.session_state["names"], labels=st.session_state["names"], height=350)
   balance.update_traces(hovertemplate='<b>%{value}</b>')
   balance.update_layout(title="Tokens distribution")
   st.sidebar.plotly_chart(balance, use_container_width=True)
