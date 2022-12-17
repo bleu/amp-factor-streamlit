@@ -3,8 +3,12 @@ from gql.transport.requests import RequestsHTTPTransport
 
 
 class Subgraph:
-    def __init__(self, network="balancer-v2"):
-        subgraph_url = f"https://api.thegraph.com/subgraphs/name/balancer-labs/{network}"
+    def __init__(self, network="Ethereum"):
+        if network=="Ethereum":
+            url_extension = "-"
+        else:
+            url_extension = "-"+network.lower()+"-"
+        subgraph_url = f"https://api.thegraph.com/subgraphs/name/balancer-labs/balancer{url_extension}v2"
         balancer_transport=RequestsHTTPTransport(
             url=subgraph_url,
             verify=True,
@@ -18,6 +22,7 @@ class Subgraph:
             pool(id:"{pool_id}") {{
                 amp
                 name
+                poolType
                 tokens {{
                     id
                         symbol
