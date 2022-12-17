@@ -50,9 +50,11 @@ else:
   base_amp = float(st.session_state["pool_data"]["amp"])
   amp_series = base_amp*np.append(np.logspace(-3, 0, endpoint=False), np.logspace(0, 3))
 
+  balance = px.pie(values=st.session_state["balances"], names=st.session_state["names"], labels=st.session_state["names"])
+  balance.update_traces(hovertemplate='<b>%{value}</b>')
+  balance.update_layout(title="Tokens distribution")
+  st.sidebar.plotly_chart(balance, use_container_width=True)
   st.sidebar.write('Base Amp Factor :', base_amp)
-  for index, name in enumerate(st.session_state['names']):
-    st.sidebar.write(name, st.session_state['balances'][index])
   new_amp = st.sidebar.select_slider('Amp factor', options=amp_series, value=base_amp)
   type_token_sell = st.sidebar.selectbox(label="Which token you want to sell?", options=st.session_state["names"])
 
@@ -89,14 +91,9 @@ else:
     depth_fig.update_layout(title=title, yaxis_title=type_token_sell)
     col1.plotly_chart(depth_fig, use_container_width=True)
 
-  col2.header("Balance")
-
-  balance = px.pie(values=st.session_state["balances"], names=st.session_state["names"], labels=st.session_state["names"])
-  balance.update_traces(hovertemplate='<b>%{value}</b>')
-  col2.plotly_chart(balance, use_container_width=True)
+  
 
   html_components = Components()
-
   st.header("Pool")
 
   current_stable_swape = StableSwapBinary(x=base_x, y=base_y, amp=base_amp)
