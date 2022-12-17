@@ -28,12 +28,10 @@ pool_id = st.sidebar.text_input('Pool id', value=st.session_state["pool_data"]["
 subgraph = Subgraph(network)
 response = subgraph.query_pool_by_id(pool_id)
 if response["pool"] is None:
-  st.title('Pool not found error')
-  st.write(f'The pool {pool_id} do not exist in the {network} network')
+  Components.error_container('Pool not found error', f'The pool {pool_id} do not exist in the {network} network')
 
 elif response["pool"]["poolType"] != "Stable":
-  st.title('Not stable pool error')
-  st.write(f'The {response["pool"]["name"]} pool is not stable')
+  Components.error_container('Not stable pool error', f'The {response["pool"]["name"]} pool is not stable')
 
 else:
   st_utils = Streamlit()
