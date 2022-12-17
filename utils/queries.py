@@ -3,8 +3,8 @@ from gql.transport.requests import RequestsHTTPTransport
 
 
 class Subgraph:
-    def __init__(self):
-        subgraph_url = "https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-v2"
+    def __init__(self, network="balancer-v2"):
+        subgraph_url = f"https://api.thegraph.com/subgraphs/name/balancer-labs/{network}"
         balancer_transport=RequestsHTTPTransport(
             url=subgraph_url,
             verify=True,
@@ -20,6 +20,7 @@ class Subgraph:
                 name
                 tokens {{
                     id
+                        symbol
                         name
                         balance
 
