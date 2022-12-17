@@ -160,6 +160,14 @@ python-versions = ">=3.6"
 tzdata = ["tzdata"]
 
 [[package]]
+name = "balancerv2cad"
+version = "0.1.93"
+description = "A preconfigured Python package, using python poetry"
+category = "main"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[[package]]
 name = "base58"
 version = "2.1.1"
 description = "Base58 and Base58Check implementation."
@@ -1889,7 +1897,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "flake8 
 [metadata]
 lock-version = "1.1"
 python-versions = "~3.8"
-content-hash = "1ce18d4dcdeaa4c5a1013d8ddae253c2d9363e4c4c34a1663d39679e0cf031f7"
+content-hash = "5bdbf2d1b5dc4b027e4df7dccb1fd0ba59953f98c155cb78d8f03d783c84c6a0"
 
 [metadata.files]
 aiohttp = []
@@ -1935,6 +1943,7 @@ backcall = [
     {file = "backcall-0.2.0.tar.gz", hash = "sha256:5cbdbf27be5e7cfadb448baf0aa95508f91f2bbc6c6437cd9cd06e2a4c215e1e"},
 ]
 "backports.zoneinfo" = []
+balancerv2cad = []
 base58 = []
 beautifulsoup4 = [
     {file = "beautifulsoup4-4.11.1-py3-none-any.whl", hash = "sha256:58d5c3d29f5a36ffeb94f02f0d786cd53014cf9b3b3951d42e0080d8a9498d30"},
