@@ -52,7 +52,12 @@ else:
 
   balance = px.pie(values=st.session_state["balances"], names=st.session_state["names"], labels=st.session_state["names"], height=350)
   balance.update_traces(hovertemplate='<b>%{value}</b>')
-  balance.update_layout(title="Tokens distribution")
+  balance.update_layout(legend=dict(
+    yanchor="top",
+    y=0.01,
+    xanchor="left",
+    x=0.01
+  ),title="Tokens distribution")
   st.sidebar.plotly_chart(balance, use_container_width=True)
   st.sidebar.write('Base Amp Factor :', base_amp)
   new_amp = st.sidebar.select_slider('Amp factor', options=amp_series, value=base_amp)
