@@ -22,7 +22,7 @@ if "pool_id" not in st.session_state:
   }
 
 networks = ["Ethereum", "Polygon", "Arbitrum"]
-network = st.sidebar.selectbox('Network', options=networks, index=networks.index(st.session_state["pool_data"]["network"]))
+network = st.sidebar.selectbox('Network', options=networks, index=0)
 pool_id = st.sidebar.text_input('Pool id', value=st.session_state["pool_data"]["pool_id"])
 
 subgraph = Subgraph(network)
