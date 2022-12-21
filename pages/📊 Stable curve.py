@@ -53,7 +53,7 @@ else:
     x=0.01
   ),title="Tokens distribution")
   st.sidebar.plotly_chart(balance, use_container_width=True)
-  st.sidebar.write('Base Amp Factor :', base_amp)
+  # st.sidebar.write('Base Amp Factor :', base_amp)
   new_amp = st.sidebar.select_slider('Amp factor', options=amp_series, value=base_amp)
   type_token_sell = st.sidebar.selectbox(label="Which token you want to sell?", options=st.session_state["names"])
   token_to_sell_index = st.session_state["names"].index(type_token_sell)
@@ -66,30 +66,32 @@ else:
   col1, col2 = st.columns(2)
   col1.header("Depth Cost")
 
-  pool = StableSwapBinary(x=st.session_state["balances"][0], y=st.session_state["balances"][1], amp=base_amp)
-  new_pool = StableSwapBinary(x=st.session_state["balances"][0], y=st.session_state["balances"][1], amp=new_amp)
-
-  dfs = []
-
   input_token_index = st.session_state["names"].index(type_token_sell)
   indexes_to_plot = [i for i in range(len(st.session_state["names"])) if i != input_token_index]
+  current_stable_swape = StableSwap(names=st.session_state["names"], amp=base_amp, balances=st.session_state["balances"])
+  new_stable_swape = StableSwap(names=st.session_state["names"], amp=new_amp, balances=st.session_state["balances"])
+  base_x = float(st.session_state["x_data"]["balance"])
+  x_data_name = st.session_state["x_data"]["name"]
 
-  for p, amp_tag, amp in zip([pool, new_pool], ["Current", "New"], [base_amp, new_amp]):
-    for price_tag, price in zip(["-2%", "+2%"], [-2, 2]):
-      df = pd.DataFrame()
-      df["Pair token"] = np.array(st.session_state["names"])[indexes_to_plot]
-      df["Balance"] = np.array(st.session_state["balances"])[indexes_to_plot]
-      df["Amp factor"] = amp_tag
-      df["Amp factor value"] = amp
 
-      # considering 2 percentage of cost change
-      df["Current price"] = p.calculate_spot_price(df["Balance"])
-      df["Price change"] = price_tag
-      df["Price Target"] = df["Current price"]*(1+(price/100))
-      df["Cost"] = p.calculate_value_to_spot_price(df["Balance"], df["Price Target"])
-      dfs.append(df)
+  rows = []
+  for pool, amp_tag, amp in zip([current_stable_swape, new_stable_swape], ["Current", "New"], [base_amp, new_amp]):
+    for price_tag, price in zip(["-2%", "+2%"], [-0.02, 0.02]):
+      for index in range(len(st.session_state["y_data"])):
+        y_data = st.session_state["y_data"][index]
+        row = dict()
+        row["Pair token"] = y_data["name"]
+        row["Amp factor"] = amp_tag
+        row["Amp factor value"] = amp
 
-  df = pd.concat(dfs)
+        # considering 2 percentage of cost change
+        row["Current price"] = float(pool.calculate_spot_price(x_data_name, y_data["name"], base_x))
+        row["Price change"] = price_tag
+        row["Price Target"] = row["Current price"]*(1+price)
+        row["Cost"] = pool.calculate_value_to_spot_price(x_data_name, y_data["name"], row["Price Target"])
+        rows.append(row)
+
+  df = pd.DataFrame.from_records(rows)
   depth_fig = px.bar(df, x='Pair token', y="Cost", color="Amp factor", facet_col="Price change", barmode="group")
   title = "2% Depth Cost Analysis for {}".format(type_token_sell)
   depth_fig.update_layout(title=title, yaxis_title=type_token_sell)
@@ -102,15 +104,10 @@ else:
   for index in range(len(st.session_state["y_data"])):
     with tabs[index]:
       y_data = st.session_state["y_data"][index]
-      base_x = float(st.session_state["x_data"]["balance"])
       base_y = float(y_data["balance"])
-
-      current_stable_swape = StableSwap(names=st.session_state["names"], amp=base_amp, balances=st.session_state["balances"])
-      new_stable_swape = StableSwap(names=st.session_state["names"], amp=new_amp, balances=st.session_state["balances"])
 
       df = pd.DataFrame()
 
-      x_data_name = st.session_state["x_data"]["name"]
       df[x_data_name] = np.linspace(float(current_stable_swape.constant)*0.2, float(current_stable_swape.constant)*0.8, num=100)
       df["Current curve"] = df[x_data_name].apply(lambda x: current_stable_swape.calculate_y(type_token_sell, y_data["name"], x)) 
       df["New curve"] = df[x_data_name].apply(lambda x: new_stable_swape.calculate_y(type_token_sell, y_data["name"], x))
