@@ -53,7 +53,7 @@ else:
     x=0.01
   ),title="Tokens distribution")
   st.sidebar.plotly_chart(balance, use_container_width=True)
-  # st.sidebar.write('Base Amp Factor :', base_amp)
+  st.sidebar.write('Base Amp Factor :', base_amp)
   new_amp = st.sidebar.select_slider('Amp factor', options=amp_series, value=base_amp)
   type_token_sell = st.sidebar.selectbox(label="Which token you want to sell?", options=st.session_state["names"])
   token_to_sell_index = st.session_state["names"].index(type_token_sell)
@@ -143,20 +143,13 @@ else:
 
       html_components.amp_price_conteiner(current_amp_dict, new_amp_dict, type_token_sell)
 
-      #todo find a better way to to this hover
-      hover = "<br>%{text}<br>"
-      hover += "{}: ".format(st.session_state["x_data"]["name"])
-      hover += "<b>%{x}</b><br>"
-      hover += "{}: ".format(y_data["name"])
-      hover += "<b>%{y}</b><br>"
-
       st.write('You paid',new_transaction['price'], y_data["name"], 'for 1',  st.session_state["x_data"]["name"])
-      fig.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['transaction_buy'], text=current_transaction['label'],name="", hovertemplate=hover,         
+      fig.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['transaction_buy'], text=current_transaction['label'],name="", hovertemplate='%{text}',         
         marker=dict(
             color='#2533F8',
             size=7,
         ), showlegend=False)
-      fig.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['transaction_buy'], text=new_transaction['label'],name="",hovertemplate=hover,         
+      fig.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['transaction_buy'], text=new_transaction['label'],name="",hovertemplate='%{text}',         
         marker=dict(
             color='#ED3C1D',
             size=7,
