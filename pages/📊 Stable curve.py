@@ -175,6 +175,6 @@ else:
             size=7,
         ), showlegend=False)
 
-      fig.update_layout(yaxis_title=y_data["name"])
+      fig.update_layout(yaxis_title=y_data["name"], title="Pool")
 
       st.plotly_chart(fig, use_container_width=True)
