@@ -60,7 +60,7 @@ else:
   other_tokens_index = [i for i in range(len(st.session_state["names"])) if i != token_to_sell_index]
   st_utils.initiate_session_state("x_data", st.session_state["pool_data"]["tokens"][token_to_sell_index])
   st_utils.initiate_session_state("y_data", [st.session_state["pool_data"]["tokens"][i] for i in other_tokens_index])
-  amount_token_sell = st.sidebar.number_input(label='How much of token {} you want to sell?'.format(type_token_sell),value=400.00, step=0.1,max_value=float(st.session_state["x_data"]["balance"]), min_value=0.0)
+  amount_token_sell = st.sidebar.number_input(label='How much of token {} you want to sell?'.format(type_token_sell),value=float(st.session_state["x_data"]["balance"])/10, step=0.1,max_value=float(st.session_state["x_data"]["balance"]), min_value=0.0)
 
   st.title(f'{st.session_state["pool_data"]["name"]} Simulation')
   col1, col2 = st.columns(2)
@@ -130,17 +130,40 @@ else:
 
       fig.update_layout(hovermode='x unified')
 
+      price = go.Figure(go.Scatter(
+        name = "Default Amp Factor",
+        x = df[x_data_name],
+        y = df["Current spot price"],
+        hovertemplate ='<b>Price: %{text}</b>',
+        text = df["Current spot price"].map('{:.5f}'.format)
+      ))
+
+      price.add_trace(go.Scatter(
+        name = "New Amp Factor",
+        x = df[x_data_name],
+        y = df["New spot price"],
+        hovertemplate = '<b>Price: %{text}</b>',
+        text = df["New spot price"].map('{:.5f}'.format)
+      ))
+
+      price.update_layout(hovermode='x unified')
+
       type_token_buy = y_data["name"]
       new_transaction = new_stable_swape.calculate_trade(type_token_sell, y_data["name"], amount_token_sell)
       current_transaction = current_stable_swape.calculate_trade(type_token_sell, y_data["name"], amount_token_sell)
+      
       new_amount_token_buy = new_transaction['amount_token_buy']
       current_amount_token_buy = current_transaction['amount_token_buy']
+      
       current_initial_spot_price = current_stable_swape.calculate_spot_price(st.session_state["x_data"]["name"], y_data["name"], current_transaction['transaction_sell'][0])
       current_final_spot_price = current_stable_swape.calculate_spot_price(st.session_state["x_data"]["name"], y_data["name"], current_transaction['transaction_sell'][1])
       current_price_impact = current_stable_swape.calculate_price_impact(current_initial_spot_price,current_final_spot_price)
+      current_transaction['spot_price'] = [float(current_initial_spot_price),float(current_final_spot_price)]
+      
       new_initial_spot_price = new_stable_swape.calculate_spot_price(st.session_state["x_data"]["name"], y_data["name"], new_transaction['transaction_sell'][0])
       new_final_spot_price = new_stable_swape.calculate_spot_price(st.session_state["x_data"]["name"], y_data["name"], new_transaction['transaction_sell'][1])
       new_price_impact = new_stable_swape.calculate_price_impact(new_initial_spot_price,new_final_spot_price)
+      new_transaction['spot_price'] = [float(new_initial_spot_price),float(new_final_spot_price)]
 
       current_amp_dict = {'amp':base_amp, 'type_token_buy': y_data["name"], 'amount_token_buy':current_transaction['amount_token_buy'], 'price':current_transaction['price'], 'default_price':current_transaction['price'], 'price_impact':current_price_impact, 'default_price_impact':current_price_impact }
       new_amp_dict = {'amp':new_amp, 'type_token_buy': y_data["name"], 'amount_token_buy':new_transaction['amount_token_buy'], 'price':new_transaction['price'], 'default_price':current_transaction['price'], 'price_impact':new_price_impact,'default_price_impact':current_price_impact }
@@ -149,18 +172,18 @@ else:
       price_impact_delta = float(100-((new_price_impact/current_price_impact)*100))
 
       if new_amp != base_amp:
-        tab_col1.subheader(f'Amp factor {new_amp}')
-        tab_col1.write(f'Will receive {new_amount_token_buy} of {type_token_buy}')
+        tab_col1.subheader(f'Amp factor {new_amp:.5f}')
+        tab_col1.write(f'Will receive {new_amount_token_buy:.5f} of {type_token_buy}')
         tab_col1.metric(label=f"Price of {type_token_buy} for 1 {type_token_sell}", value=float(new_transaction['price']), delta=f'{price_delta}%')
         tab_col1.metric(label="Price Impact", value=float(new_price_impact), delta=f'{price_impact_delta}%')
 
-        tab_col2.subheader(f'Amp factor {base_amp}')
-        tab_col2.write(f'Will receive {current_amount_token_buy} of {type_token_buy}')
+        tab_col2.subheader(f'Amp factor {base_amp:.5f}')
+        tab_col2.write(f'Will receive {current_amount_token_buy:.5f} of {type_token_buy}')
         tab_col2.metric(label=f"Price of {type_token_buy} for 1 {type_token_sell}", value=float(current_transaction['price']))
         tab_col2.metric(label="Price Impact", value=float(current_price_impact))
       else:
-        st.subheader(f'Amp factor {base_amp}')
-        st.write(f'Will receive {current_amount_token_buy} of {type_token_buy}')
+        st.subheader(f'Amp factor {base_amp:.5f}')
+        st.write(f'Will receive {current_amount_token_buy:.5f} of {type_token_buy}')
         st.metric(label=f"Price of {type_token_buy} for 1 {type_token_sell}", value=float(current_transaction['price']))
         st.metric(label="Price Impact", value=float(current_price_impact))
 
@@ -175,6 +198,20 @@ else:
             size=7,
         ), showlegend=False)
 
-      fig.update_layout(yaxis_title=y_data["name"], title="Pool")
+      price.add_scatter(mode="markers",x=current_transaction['transaction_sell'],y=current_transaction['spot_price'], text=current_transaction['label'],name="", hovertemplate='%{text} <br> %{y}',         
+        marker=dict(
+            color='#2533F8',
+            size=7,
+        ), showlegend=False)
 
+      price.add_scatter(mode="markers",x=new_transaction['transaction_sell'],y=new_transaction['spot_price'], text=new_transaction['label'],name="",hovertemplate='%{y}',         
+        marker=dict(
+            color='#ED3C1D',
+            size=7,
+        ), showlegend=False)
+
+      fig.update_layout(xaxis_title=st.session_state["x_data"]["name"], yaxis_title=y_data["name"], title="Pool")
+      price.update_layout(xaxis_title=st.session_state["x_data"]["name"], yaxis_title="Price" ,title="Spot Price")
+
+      st.plotly_chart(price, use_container_width=True)
       st.plotly_chart(fig, use_container_width=True)
