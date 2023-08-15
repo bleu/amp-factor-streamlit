@@ -1,3 +1,7 @@
+ARCHIVED: incorporated into [Balancer Tools](github.com/bleu-studio/balancer-tools) Pools Simulator.
+
+----
+
 To run the server locally use this command with the environment active:
 
 `streamlit run Home.py`
